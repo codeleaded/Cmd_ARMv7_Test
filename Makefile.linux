@@ -1,0 +1,28 @@
+# === Makefile.linux ===
+
+CC = aarch64-linux-gnu-gcc
+CFLAGS = -O0 -mavx2 -std=gnu17
+INCLUDES = -Isrc
+LDFLAGS = -lm
+SRC_DIR = src
+BUILD_DIR = build
+TARGET = $(BUILD_DIR)/Main
+
+all:
+	$(CC) $(CFLAGS) $(INCLUDES) $(SRC_DIR)/Main.c -o $(TARGET) $(LDFLAGS)
+#qemu-system-aarch64 -machine virt -cpu cortex-a53 -m 1024 -nographic -kernel <dein_kernel>
+#aarch64-linux-gnu-as -o hello.o hello.s
+#aarch64-linux-gnu-ld -o hello hello.o
+
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
+
+exe:
+	qemu-aarch64 ./$(TARGET)
+
+clean:
+	rm -rf $(BUILD_DIR)/*
+
+do: clean all exe
+
+# === Makefile.linux ===
