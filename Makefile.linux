@@ -9,17 +9,17 @@ BUILD_DIR = build
 TARGET = $(BUILD_DIR)/Main
 
 all:
-	$(CC) $(CFLAGS) $(INCLUDES) $(SRC_DIR)/Main.c -o $(TARGET) $(LDFLAGS)
+#$(CC) $(CFLAGS) $(INCLUDES) $(SRC_DIR)/Main.c -o $(TARGET) $(LDFLAGS)
 #qemu-system-aarch64 -machine virt -cpu cortex-a53 -m 1024 -nographic -kernel <dein_kernel>
-	aarch64-linux-gnu-as -o $(BUILD_DIR)/Main_S.o $(SRC_DIR)/Main_S.s
-	aarch64-linux-gnu-ld -o $(BUILD_DIR)/Main_S $(BUILD_DIR)/Main_S.o -static
+	aarch64-linux-gnu-as -o $(BUILD_DIR)/AArch64_Main.o $(SRC_DIR)/AArch64_Main.s
+	aarch64-linux-gnu-ld -o $(BUILD_DIR)/AArch64_Main $(BUILD_DIR)/AArch64_Main.o -static
 
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
 exe:
-	qemu-aarch64 -L ~/ubuntu-arm64 ./$(TARGET)
-	qemu-aarch64 -L ~/ubuntu-arm64 $(BUILD_DIR)/Main_S
+#qemu-aarch64 -L ~/ubuntu-arm64 ./$(TARGET)
+	qemu-aarch64 -L ~/ubuntu-arm64 $(BUILD_DIR)/AArch64_Main
 
 clean:
 	rm -rf $(BUILD_DIR)/*
