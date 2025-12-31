@@ -1,25 +1,25 @@
 # === Makefile.linux ===
 
-CC = aarch64-linux-gnu-gcc
-CFLAGS = -O0 -std=gnu17
+CC = arm-linux-gnueabihf-gcc
+CFLAGS = -c -O0 -std=gnu17
 INCLUDES = -Isrc
-LDFLAGS = -lm -static
+LDFLAGS = -lm
 SRC_DIR = src
 BUILD_DIR = build
 TARGET = $(BUILD_DIR)/Main
 
 all:
-#$(CC) $(CFLAGS) $(INCLUDES) $(SRC_DIR)/Main.c -o $(TARGET) $(LDFLAGS)
-#qemu-system-aarch64 -machine virt -cpu cortex-a53 -m 1024 -nographic -kernel <dein_kernel>
-	aarch64-linux-gnu-as -o $(BUILD_DIR)/AArch64_Main.o $(SRC_DIR)/AArch64_Main.s
-	aarch64-linux-gnu-ld -o $(BUILD_DIR)/AArch64_Main $(BUILD_DIR)/AArch64_Main.o -static
+	$(CC) $(CFLAGS) $(INCLUDES) -march=armv7-a -mfpu=vfpv3 -mfloat-abi=hard -o $(BUILD_DIR)/Main.o $(SRC_DIR)/Main.c
+#$(CC) $(CFLAGS) $(INCLUDES) -march=armv7-a -mfpu=vfpv3 -mfloat-abi=hard -o $(BUILD_DIR)/AArch64_Main.o $(SRC_DIR)/AArch64_Main.c
+	$(CC) -o $(BUILD_DIR)/Main $(BUILD_DIR)/Main.o $(LDFLAGS)
+#$(CC) -o $(BUILD_DIR)/AArch64_Main $(BUILD_DIR)/AArch64_Main.o $(LDFLAGS)
 
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
 exe:
-#qemu-aarch64 -L ~/ubuntu-arm64 ./$(TARGET)
-	qemu-aarch64 -L ~/ubuntu-arm64 $(BUILD_DIR)/AArch64_Main
+	qemu-arm -L /usr/arm-linux-gnueabihf $(TARGET)
+#qemu-arm -L /usr/arm-linux-gnueabihf  $(BUILD_DIR)/AArch64_Main
 
 clean:
 	rm -rf $(BUILD_DIR)/*
